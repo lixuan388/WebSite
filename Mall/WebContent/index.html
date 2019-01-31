@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html style="background-color: silver;">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<link rel="stylesheet" href="/Res/layui/css/layui.css" media="all">
+<link rel="stylesheet" href="/Res/css/Default.css" media="all">
+<link rel="stylesheet" href="index.css" media="all">
+<script type="text/javascript">
+document.documentElement.style.fontSize = (document.documentElement.clientWidth / 375 * 14)  + 'px';
+
+</script>
+<title>商城</title>
+</head>
+<body class="ecity">
+  <div>
+    <div class="search_wrapper">
+      <div>
+        <div id="msCancelBtn" class="header-icon-back" style="display: block;">
+          <span></span>
+        </div>
+        <div>
+          <form action="/search/search.action" class="header-search-form">
+            <div class="header-search-box" id="msSearchBox">
+              <i id="search-input-left-icon" class="header-icon-fdj"></i>
+              <div class="layui-input" style="height: 2.14em;">
+                <input type="text" autocomplete="off" placeholder="" class="search-input">
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <div class="layui-carousel slider-wrapper" id="slider-wrapper">
+      <div carousel-item=""></div>
+    </div>
+    <div class="branding_wrapper" id="branding_wrapper">
+      <div class="branding_wrapper_box">
+        <div style="clear: both;"></div>
+      </div>
+    </div>
+    <div id='ShowGoodsList' class='ShowGoodsList'>
+      <div class='title'>
+        <span>精选商品</span>
+      </div>
+      <div class='list'></div>
+    </div>
+  </div>
+  <!--  
+  <div class="loadingmask">
+    <div class="weui-mask_transparent"></div>
+    <div class="weui-toast">
+      <i class="weui-loading weui-icon_toast"></i>
+    </div>
+  </div>
+  -->
+  <script id="GoodsList" type="text/html">
+  <a class="GoodsList_a" href="views/itemView.html?id={{d.GoodsID}}" target="_self">
+    <div class="list3_img list3_img_wrap">
+      <img src="{{d.GoodsImage}}" class=" fadein">
+    </div>
+    <h4 class="list3_title ">{{d.GoodsName}}</h4>
+    <div class="list3_info">
+      <span class="list3_price0">￥</span><span class="list3_price1">{{d.GoodsPrice1}}</span><span class="list3_price2">{{#if (d.GoodsPrice2!='') {}}.{{# }}}{{d.GoodsPrice2}}</span>
+    </div>
+  </a>
+</script>
+  <script src="/Res/layui/layui.js" charset="utf-8"></script>
+  <script>
+layui.config({
+  base: 'lib/' //静态资源所在路径
+}).extend({
+  index: 'lib/index' //主入口模块
+}).use(['index','laytpl'],function(){
+  var index=layui.index;
+  var $=layui.$;
+  //index.InitFontSize();
+  
+  index.LoadSliderWrapper();
+  index.LoadBrandingWrapper();
+
+  var getTpl = $('#GoodsList').html();
+  var view = $('#ShowGoodsList .list');
+  var key='';
+  index.LoadGoodsList(view,key,getTpl);
+  
+  ///////////////////////////////////////////////////
+  /*
+  var laytpl = layui.laytpl;
+  var $ = layui.$;
+  var data={
+    'GoodsImage':'//m.360buyimg.com/babel/jfs/t19105/94/769118169/312956/4ee32e27/5aa90e62N1ecd66a0.jpg!q70.dpg'
+    ,'GoodsName':'孟乍隆苏吝府茉莉香米 泰国香米 原装进口大米10KG'
+    ,'GoodsPrice1':'159'
+    ,'GoodsPrice2':'90'
+    }
+  var getTpl = $('#GoodsList').html();
+  var view = $('#ShowGoodsList .list');
+  for (i=0;i<10;i++)
+  {
+    laytpl(getTpl).render(data, function(html){
+      view.append(html);
+    }); 
+  }
+
+  view.append('<div style="clear: both;"></div>');
+  */
+});
+</script>
+</body>
+</html>

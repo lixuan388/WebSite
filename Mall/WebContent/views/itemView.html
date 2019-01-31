@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html style="background-color: silver;">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<style type="text/css">
+.layui-btn{
+  height: 3em;
+  line-height: 3em;
+  padding: 0 1em;
+  border-radius: 0.14em;
+  
+}
+</style>
+
+
+<link rel="stylesheet" href="/Res/layui/css/layui.css" media="all">
+
+  <script src="/Res/layui/layui.js" charset="utf-8"></script>
+  
+<link rel="stylesheet" href="/Res/css/Default.css" media="all">
+<link rel="stylesheet" href="../index.css?111" media="all">
+<link rel="stylesheet" href="itemView.css?111" media="all">
+<title>商城</title>
+<script type="text/javascript">
+//document.documentElement.style.fontSize = (document.documentElement.clientWidth / 375 * 14)  + 'px';
+
+</script>
+</head>
+<body  class="ecity">
+  <div class="header-bar" goback="true" gohome="true" title="商品信息"></div>
+  <div class="SaleInfo ">
+    <div class="layui-carousel slider-wrapper" id="slider-wrapper">
+      <div carousel-item=""></div>
+    </div>
+  </div>
+  
+  <div class="Menu-bar">
+    <div class='Menu-cart'><a href="javascript:void(0);" ><i class="layui-icon layui-icon-cart"></i><span>购物车</span></a></div>
+    <div class='Menu-cart-btn div'><a href="javascript:void(0);" layadmin-event="BuyConfirm1"><span>加入购物车</span></a></div>
+    <div class='Menu-buy div'><a href="javascript:void(0);" layadmin-event="BuyConfirm2">立即购买</a></div>
+  </div>
+  
+  <!-- 
+  <div id ="loadingmask"  class="loadingmask" >
+    <div class="weui-mask_transparent"></div>
+    <div class="weui-toast">
+      <i class="weui-loading weui-icon_toast"></i>
+    </div>
+  </div>
+ -->
+  <script id="SaleInfoTpl" type="text/html">
+  <div class='GoodsList_a'>
+    <h4 class="list3_title GoodsTitle">{{d.GoodsDescInfo.ItemName}}</h4>
+    <div class="list3_info priceSpec">
+      <div class="list3_price">
+        <span class="list3_price0">￥</span><span class="list3_price1">{{d.GoodsPrice1}}</span><span class="list3_price2">{{#if (d.GoodsPrice2!='') {}}.{{# }}}{{d.GoodsPrice2}}</span>
+      </div>
+      <div class="cart"><a href="javascript:void(0);" class="ecity layui-btn layui-btn-primary" ><i class="layui-icon layui-icon-cart"></i>加入购物车</a></div>
+      <div style="clear:botn"></div>
+    </div>
+
+    <div id="BuyConfirm" class="" style="display:none">
+      <div class="loadingmask" layadmin-event="CloseBuyConfirm"></div>
+      <div class="BuyConfirmBody layui-anim layui-anim-up" >
+        <div class="header">
+          <img alt="商品图" src="{{d.GoodsImage}}" class="avt" id="popupImg" ptag="7001.1.239">
+          <p class="price" id="priceSale2">
+            ¥<em>{{d.GoodsPrice1}}</em>{{#if (d.GoodsPrice2!='') {}}.{{# }}}{{d.GoodsPrice2}}
+          </p>
+          <p class="prop" id="popupSkuChoose">
+             {{d.GoodsDescInfo.ItemName}}
+          </p>
+          <i class="close" id="popupClose"  layadmin-event="CloseBuyConfirm"></i>
+        </div>
+        <div class="count_choose" id="popupCount">
+          <div class="num_wrap_v2 CountChoose">
+            <span class="minus disable" id="minus1"><i class="row"></i></span>
+            <div class="text_wrap">
+              <input class="text" type="tel" value="1" id="buyNum1">
+            </div>
+            <span class="plus" id="plus1"><i class="row"></i><i class="col"></i></span>
+          </div>
+          <p class="count">数量<em class="store" style="display: none;"></em>
+          </p>
+        </div>
+        <div>
+          <a href="javascript:void(0);" class="layui-btn  layui-btn-danger" style="width: 100%">确认</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="GoodsRemark" style="transform-origin: 0px 0px 0px;transform: scale(1);font-size: 24px;line-height: 2;">{{d.GoodsDescInfo.ItemDesc}}</div>
+
+
+
+</script>  
+  <script>
+layui.config({
+  base: '../lib/' //静态资源所在路径
+}).extend({
+  itemView: 'views/itemView' //主入口模块
+}).use(['itemView','index'],function(){
+  var index=layui.index;
+  var $=layui.$;
+  var itemView=layui.itemView;
+
+  //index.InitFontSize();
+  
+  var HrefParameter=location.href.split('?')
+  if (HrefParameter[1]!=undefined){
+    var ParameterList=HrefParameter[1].split('&')
+    var parameter={}
+    for (i in ParameterList)
+    {
+      var p=ParameterList[i].split('=');
+      parameter[p[0]]=p[1]    
+    }
+    var id=parameter['id']||'0';
+    itemView.LoadGoodsInfo(id);
+  }
+  
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="zh-CN" >
+<head>
+<title>WebApp</title>
+  <meta charset="utf-8">
+<meta name="renderer" content="webkit">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+<link rel="stylesheet" href="../layui/layui/css/layui.css" media="all">
+<link rel="stylesheet" href="../layui/style/admin.css" media="all">
+</style>
+</head>
+<body >
+  <div id="MianDiv" style="position: relative; height: calc(100vh - 20px);; padding: 10px;">
+    <div id="ProductInfoDiv" style="position: relative; height: 100%;background-color: #fff;">
+      <div>
+        <form class="layui-form layui-form-pane" action="">
+          <div style="padding-top: 10px;padding-left: 20px;">
+            <button type="button" class="layui-btn layui-btn-primary" lay-event="Query" style="float: left; margin-left: 10px;">刷新</button>
+            <button type="button" style="float: left; margin-left: 10px;" class="layui-btn layui-btn-primary" lay-event="Insert" role="button">新增</button>
+            <div style="clear: both;"></div>
+          </div>
+          <div style="margin: 10px 20px; border: 1px solid silver;"></div>
+        </form>
+      </div>
+      
+      <table class="layui-table" id='DataGrid' lay-filter="DataGrid">
+      </table>
+    </div>
+  </div>
+  <script type="text/html" id="TableOPBar">
+  <a class="layui-btn layui-btn-xs" lay-event="edit" style="width: 30%;">修改</a>
+  <a class="layui-btn layui-btn-xs" lay-event="addChild" style="width: 30%;">增加下级</a>
+  <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del" style="width: 30%;">删除</a>
+</script>
+  <script src="../layui/layui/layui.js?t=1"></script>
+  <script src="UserMenu.js?t=1"></script>
+  <script>
+  </script>
+</body>
+</html>

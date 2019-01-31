@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="zh-CN" >
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+
+<meta name="renderer" content="webkit">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+<link rel="stylesheet" href="../layui/layui/css/layui.css" media="all">
+<link rel="stylesheet" href="../layui/style/admin.css" media="all">
+
+</head>
+<body>
+  <div style="margin: 10px;">
+    <form class="layui-form" action="" lay-filter="UserInfoForm">
+      <div class="layui-form-item">
+        <label class="layui-form-label">ID</label>
+        <div class="layui-input-block">
+          <input type="text" name="_id" lay-verify="title" autocomplete="off" placeholder="请输入标题" class="layui-input">
+        </div>
+      </div>
+      <div class="layui-form-item">
+        <label class="layui-form-label">名称</label>
+        <div class="layui-input-block">
+          <input type="text" name="_Text" lay-verify="title" autocomplete="off" placeholder="请输入标题" class="layui-input">
+        </div>
+      </div>
+      <div class="layui-form-item">
+        <label class="layui-form-label">链接</label>
+        <div class="layui-input-block">
+          <input type="text" name="_Href" lay-verify="title" autocomplete="off" placeholder="请输入标题" class="layui-input">
+        </div>
+      </div>      
+      <div class="layui-form-item">
+        <label class="layui-form-label">MenuID</label>
+        <div class="layui-input-block">
+          <input type="text" name="_MenuID" lay-verify="title" autocomplete="off" placeholder="请输入标题" class="layui-input">
+        </div>
+      </div>
+      <div class="layui-form-item">
+        <label class="layui-form-label">图标</label>
+        <div class="layui-input-block">
+          <input type="text" name="_Icon" lay-verify="title" autocomplete="off" placeholder="请输入标题" class="layui-input">
+        </div>
+      </div>
+      <div class="layui-form-item">
+        <label class="layui-form-label">父菜单</label>
+        <div class="layui-input-block">
+          <input type="text" name="_ParentID" lay-verify="title" autocomplete="off" placeholder="请输入标题" class="layui-input">
+        </div>
+      </div>
+      <div class="layui-form-item">
+        <label class="layui-form-label">排序</label>
+        <div class="layui-input-block">
+          <input type="text" name="_Index" lay-verify="title" autocomplete="off" placeholder="请输入标题" class="layui-input">
+        </div>
+      </div>
+      <div class="layui-form-item">
+        <label class="layui-form-label">状态</label>
+        <div class="layui-input-block">
+          <input type="checkbox" checked="" name="_Status2" lay-skin="switch" lay-filter="_Status2" lay-text="启用|停用" >
+        </div>
+      </div>
+
+      <input type="hidden" name="_Status" lay-verify="title" autocomplete="off" placeholder="请输入标题" class="layui-input">
+
+
+      <div class="layui-form-item">
+        <button class="layui-btn layui-btn-fluid" lay-submit lay-filter="LAY-submit">保存数据</button>
+      </div>
+        
+  
+    </form>
+  
+  </div>
+
+
+  <script src="/Res/layui/layui.js"></script>  
+  <script>
+  layui.config({
+    base: '../layui/' //静态资源所在路径
+  }).extend({
+    index: 'lib/index' //主入口模块
+  }).use(['index','form'], function(){
+    var $ = layui.$
+    ,setter = layui.setter
+    ,admin = layui.admin
+    ,form = layui.form
+    ,router = layui.router();
+
+    form.render();
+    
+    console.log(router);
+    var id=router.path[0];
+    var pid=router.path[1]==undefined?-1:router.path[1];
+    
+    
+    function Query(id)
+    {
+      if (id==-1)
+      {
+
+        form.val("UserInfoForm",{
+          _id: "-1", 
+          _Text: "", 
+          _Href: "", 
+          _MenuID: "", 
+          _Icon: "layui-icon-home", 
+          _ParentID: pid, 
+          _Index: "10000", 
+          _Status:'I'
+        });
+      }
+      else
+      {
+        admin.req({
+          url: '../../web/WebApp/UserMenuQuery.json?ID='+id //实际使用请改成服务端真实接口
+          ,success: function(res){
+            console.log(res);
+            form.val("UserInfoForm",res.Data[0]);
+            form.val("UserInfoForm",{'_Status2':res.Data[0]._Status=='I'});
+            
+          }
+        });
+      }
+    }
+
+    //提交
+    form.on('submit(LAY-submit)', function(obj){
+      var field = obj.field;
+      console.log(field);
+
+      var data={};
+      for (i in field)
+      {
+        data['mml'+i]=field[i];
+      }
+      delete data.mml_Status2;
+      var json={DataRows:[data]};
+      //请求接口
+      admin.req({
+        url: '../../web/WebApp/UserMenuPost.json' //实际使用请改成服务端真实接口
+          ,type: 'post'
+        ,data: JSON.stringify(json)
+        ,success: function(res){   
+          if (res.MsgID==1)
+          {
+            layer.alert('数据保存成功！', function(index){
+              //do something
+              layer.close(index);
+              var index2 = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+              parent.layer.close(index2); //再执行关闭   
+            });  
+          }
+          else {
+            layer.alert('数据保存失败！<br>'+res.MsgText, function(index){
+              //do something
+              layer.close(index);
+            });  
+          }
+        }
+      });
+      
+      return false;
+    });
+    //监听指定开关
+    form.on('switch(_Status2)', function(data){
+      $("[name=_Status]").val(this.checked ? 'I' : 'D');
+    });
+    
+    Query(id);
+  });
+  </script>    
+</body>
+</html>
